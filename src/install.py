@@ -95,7 +95,7 @@ def main():
             # NOTE Returns an open file object connected to pipe 
             os.popen('python -m pip install {dependency}=={version}'.format(
                 dependency=dependency,
-                version=dependencies[dependency]["version"]))
+                version=dependencies[dependency]["version"])).read()
 
     if len(updated_dependencies):
         changed_dependencies = dependencies
