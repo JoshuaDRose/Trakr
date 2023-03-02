@@ -1,3 +1,6 @@
+[![wakatime](https://wakatime.com/badge/user/a66594a7-985e-4e5a-b4f6-67f60753b462/project/b5e93e4d-1284-4e1a-a86f-59e804284e77.svg)](https://wakatime.com/badge/user/a66594a7-985e-4e5a-b4f6-67f60753b462/project/b5e93e4d-1284-4e1a-a86f-59e804284e77)
+
+
 ## License
 
 ```
