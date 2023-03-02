@@ -7,8 +7,8 @@ for this project. It can be run with or without command line arguments,
 however, these are developer features. More information on this is found 
 in the handle_cli_args (name may and have may changed)
 
-If there are any bugs in this file, or any problems issues and or pull
-requests are encourage and highly appreciated.
+If there are any bugs in this file, or any problems or issues,
+pull requests are encouraged and highly appreciated.
 
 submit a bug report: https://github.com/JoshuaDRose/Trakr/issues/new
 
@@ -19,24 +19,14 @@ TODO:    log folder
 import sys
 import os
 import json
+
 import logging
 import logging.config
 
+import util
+
 args: set[str] = sys.argv[1:] # NOTE remove the first element on the right side
 logger: None | object = None # Placeholder for logger object
-
-def setup_logger_object() -> object:
-    """
-    Description: This function is required (previously 
-    wasn't a function and loaded in main() but due to handle_cli_args()
-    function it needs to be loaded before everything as several messages
-    are log calls in handle_cli_args()
-
-    return: <object>
-    """
-    logging.config.fileConfig(locate_directory(file="config.ini"))
-    logger: object = logging.getLogger()
-    return logger
 
 def handle_cli_args():
     """
@@ -102,27 +92,6 @@ def count_dependencies(file: dict) -> int:
     return dependency_amount
 
 
-def locate_directory(file = "config.ini") -> str:
-    """
-    Description: Locate file through determining the root folder
-
-    return: <str>
-    """
-    def get_search_path() -> tuple:
-        """
-        Description: Used as a tool in io functions
-
-        return: <tuple>
-        """
-        nonlocal folder, file
-        folder, file = os.path.split(os.path.join(
-            os.path.split(os.path.dirname(os.getcwd()))[1], file))
-        return folder, file
-    folder, _file = 
-    if folder.__ne__("Trakr"):
-        return os.path.join("src", _file)
-    return _file
-
 def query_create_log_file():
     """
     Description: Queries user as to if they'd like to create
@@ -163,22 +132,7 @@ def log_change(change: str, _file="install.log", emoji: str = str()) -> bool:
     try:
         fp = open(file, "a")
     except FileNotFoundError:
-
-def create_file(filename):
-    """
-    filename <str> the name of the file...
-    Every 60 seconds in Africa, a minute passes.
-
-    return: ...
-    """
-    logger.info(f" 📑 Creating {filename} in {os.getcwd()}")
-    try:
-        with open(filename, "w", False, "utf-8") as file:
-            file.close()
-    except PermissionError as error:
-        logger.critical(
-        f""" ❌ Could not create {filename}: insufficient persmissions.""")
-        sys.exit(error.errno)
+        ...
 
 def main():
     """
