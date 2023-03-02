@@ -17,6 +17,7 @@ TODO:    log folder
 """
 
 import sys
+# NOTE see docs.python.org/3.10/library/os.html
 import os
 import json
 
@@ -81,6 +82,7 @@ def load_dependencies(root) -> dict:
         load_dependency_as_object(dependency_file_name)
     return dependency_file
 
+
 def count_dependencies(file: dict) -> int:
     """
     Description: Counts the dependencies in file
@@ -99,6 +101,7 @@ def query_create_log_file():
 
     return: ...
     """
+
     logger.info(""" 🔎 Could not find {file}.
    Would you like to create a log file? [n/Y] """)
     _input = input(logger.debug())
@@ -123,6 +126,37 @@ def query_create_log_file():
 def log_change(change: str, _file="install.log", emoji: str = str()) -> bool:
     """
     :change: message of the change to be recorded
+
+    :emoji: unicode emoji character - NF* allowed
+
+    :return: If the function succeeded; interpreted as <true | false>
+    """
+    file = locate_directory(_file)
+    logger.debug("🥾 Removed un-needed variable: {file_content}", file_content=_file.__repr__())
+    del _file
+    fp = object()
+    try:
+        fp = open(file, 'a')
+    except FileNotFoundError:
+        _input = input(logger.debug(f" 🔎 Could not find {file}. Would you like to create a log file? [n/Y] >> "))
+        match _input:
+            case '':
+                pass
+
+def create_file(filename):
+    """
+    filename <str> the name of the file... Every 60 seconds in Africa, a minute passes.
+
+    :return:
+    """
+    logger.info(f" 📑 Creating {filename} in {os.getcwd()}")
+    try:
+        with open(filename, 'w', False, 'utf-8') as file:
+            file.close()
+    except PermissionError as error:
+        logger.critical(f" ❌ Could not create {filename}: insufficient persmissions")
+        sys.exit(error.errno)
+
     :emoji: unicode emoji character - NF allowed
 
     return: <true | false>
@@ -144,6 +178,9 @@ def main():
     dependencies: dict = load_dependencies("package.json")
     # NOTE Dependencies that were updated in the process of installation
     updated_dependencies = {}
+
+    # NOTE Dependencies that were updated in the process of installation
+    updated_dependencies: list[str] | list[None] = []
 
     for dependency in dependencies:
         if not dependencies[dependency]["installed"]:
@@ -177,3 +214,5 @@ if __name__ == "__main__":
     logger = setup_logger_object()
     handle_cli_args()
     main()
+
+# * NF = nerd font
