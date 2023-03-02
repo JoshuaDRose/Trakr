@@ -34,7 +34,7 @@ def setup_logger_object() -> object:
 
     return: <object>
     """
-    logging.config.fileConfig(locate_directory("config.ini"))
+    logging.config.fileConfig(locate_directory(file="config.ini"))
     logger: object = logging.getLogger()
     return logger
 
@@ -64,6 +64,15 @@ def handle_cli_args():
         match args[0]:
             case "--reset-install":
                 reset_install()
+
+def load_dependency_as_object(file):
+    """
+    Description: This function serves as a dynamic way testing at
+    runtime such that if a file not found error takes place it can
+    be run again through being sourced rather than being continuously nested
+
+    return: object (fileio object)
+    """
             
 def load_dependencies(root) -> dict:
     """
@@ -71,7 +80,9 @@ def load_dependencies(root) -> dict:
 
     :return: dict
     """
-    dependency_file: dict = json.load(open(os.path.join(root, "package.json"), "r"))
+    dependency_file_name: str = locate_directory(file="package.json")
+    print(dependency_file_name)
+        dependency_file_object: dict = json.load(open(dependency_file_name, "r"))
     return dependency_file
 
 def count_dependencies(file: dict) -> int:
@@ -118,6 +129,8 @@ def log_change(change: str, _file="install.log", emoji: str = str()) -> bool:
                     return
                 case "n":
                     logger.debug("   Ignoring log file creation.")
+                    return
+                case _:
                     return
         except Exception as error:
             logger.critical(error)
