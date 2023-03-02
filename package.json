@@ -1,10 +1,13 @@
 {
 	"colorama": {
-		"version": "0.4.6" ,
+		"version": "0.4.6",
 		"installed": false
 	},
 	"coverage": {
 		"version": "7.2.1",
 		"installed": false
+	},
+	"dependencies": {
+		"@octokit/core": "^4.2.0"
 	}
 }
