@@ -38,16 +38,26 @@ def log_change(change: str, _file="install.log", emoji: str = str()) -> bool:
     :return: If the function succeeded; interpreted as <true | false>
     """
     file = locate_directory(_file)
-    logger.debug("🥾 Removed un-needed variable: {file_content}", file_content=_file.__repr__())
-    del _file
+    # logger.debug("🥾 Removed un-needed variable: {file_content}", file_content=_file.__repr__())
     fp = object()
     try:
         fp = open(file, 'a')
     except FileNotFoundError:
         _input = input(logger.debug(f" 🔎 Could not find {file}. Would you like to create a log file? [n/Y] >> "))
-        match _input:
-            case '':
-                pass
+        try:
+            match _input.lower():
+                case '' or 'yes' or 'y':
+                    with open(file, 'w') as fp: fp.close()
+                    logger.debug(f" ✅ Created {file} in {os.path.join(os.getcwd(), file)} ")
+                    log_change(change, _file, emoji)
+                    return
+                case 'n':
+                    logger.debug("   Ignoring log file creation.")
+                    return
+        except Exception as error:
+            logger.critical(error)
+            sys.exit(error.errno)
+
 
 def create_file(filename):
     """
