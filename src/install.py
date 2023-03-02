@@ -80,7 +80,7 @@ def main():
     :return:
     """
 
-    logging.config.fileConfig(locate_directory('config.ini')
+    logging.config.fileConfig(locate_directory('config.ini'))
     logger: object = logging.getLogger()
     logger.info(" 🔖 Finished preparing package metadata")
     logger.info(" 🧰 Attempting to install packages")
