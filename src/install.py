@@ -171,7 +171,6 @@ def main():
                 dependency_amt=dependency_count,
                 dependency_name=dependency[0],
                 dependency_version=dependency[1]['version']))
-            # changed_dependencies[dependency]["update"]
 
     logger.info(" 🎉 Success!")
 
