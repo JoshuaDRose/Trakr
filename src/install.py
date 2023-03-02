@@ -47,5 +47,7 @@ def main():
             dependency=dependency,
             version=dependencies[dependency]["version"]))
 
+    logger.info(" 🎉 Success!")
+
 if __name__ == "__main__":
     main()
