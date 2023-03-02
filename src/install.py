@@ -19,7 +19,6 @@ TODO:    log folder
 import sys
 import os
 import json
-
 import logging
 import logging.config
 
@@ -65,7 +64,6 @@ def handle_cli_args():
         match args[0]:
             case '--reset-install':
                 reset_install()
-
             
 def load_dependencies(root) -> dict:
     """
@@ -100,7 +98,7 @@ def locate_directory(file = 'config.ini') -> str:
 def log_change(change: str, _file="install.log", emoji: str = str()) -> bool:
     """
     :change: message of the change to be recorded
-    :emoji: unicode emoji character - NF* allowed
+    :emoji: unicode emoji character - NF allowed
 
     :return: If the function succeeded; interpreted as <true | false>
     """
@@ -125,7 +123,6 @@ def log_change(change: str, _file="install.log", emoji: str = str()) -> bool:
             logger.critical(error)
             sys.exit(error.errno)
 
-
 def create_file(filename):
     """
     filename <str> the name of the file... Every 60 seconds in Africa, a minute passes.
@@ -146,12 +143,10 @@ def main():
 
     :return:
     """
-
     logger.info(" 🧰 Attempting to install packages")
     dependencies: dict = load_dependencies('' if os.path.split(os.path.dirname(os.getcwd()))[1].__ne__('Trakr') else '..')
-
     # NOTE Dependencies that were updated in the process of installation
-    updated_dependencies: set[str] = []
+    updated_dependencies = {}
 
     for dependency in dependencies:
         if not dependencies[dependency]["installed"]:
@@ -160,9 +155,9 @@ def main():
             os.popen('python -m pip install {dependency}=={version}'.format(
                 dependency=dependency,
                 version=dependencies[dependency]["version"])).read()  # NOTE read suppresses output
-            updated_dependencies.append((dependency, dependencies[dependency]))
+            updated_dependencies[dependency] = dependencies[dependency]
 
-    if len(updated_dependencies):
+    if len(updated_dependencies.keys()):
         changed_dependencies = dependencies
         dependency_count = count_dependencies(changed_dependencies)  # NOTE when adding test cases, test both vars equal
         for index, dependency in enumerate(updated_dependencies):
@@ -178,5 +173,3 @@ if __name__ == "__main__":
     logger = setup_logger_object()
     handle_cli_args()
     main()
-
-# * NF = nerd font
