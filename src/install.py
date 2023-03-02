@@ -81,6 +81,7 @@ def main():
 
     for dependency in dependencies:
         if not dependencies[dependency]["installed"]:
+            # https://stackoverflow.com/questions/3503879/assign-output-of-os-system-to-a-variable-and-prevent-it-from-being-displayed-on
             # NOTE Returns an open file object connected to pipe 
             os.popen('python -m pip install {dependency}=={version}'.format(
                 dependency=dependency,
