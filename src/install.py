@@ -1,15 +1,72 @@
 """
+License: see attatched snippet
+Copyright (c) 2023 Joshua Rose
+
+The installer file is necessary to install dependencies required
+for this project. It can be run with or without command line arguments,
+however, these are developer features. More information on this is found 
+in the handle_cli_args (name may and have may changed)
+
+If there are any bugs in this file, or any problems issues and or pull
+requests are encourage and highly appreciated.
+
+submit a bug report: https://github.com/JoshuaDRose/Trakr/issues/new
+
 TODO: 🪴 emoticons
 TODO:    log folder
 """
+
 import sys
-# NOTE see docs.python.org/3.10/library/os.html
 import os
 import json
 
 import logging
 import logging.config
 
+args = sys.argv[1:] # NOTE remove the first element on the right side
+logger: None | object = None # Placeholder for logger object
+
+def setup_logger_object() -> object:
+    """
+    Description: This function is required (previously 
+    wasn't a function and loaded in main() but due to handle_cli_args()
+    function it needs to be loaded before everything as several messages
+    are log calls in handle_cli_args()
+
+    return: <object>
+    """
+    logging.config.fileConfig(locate_directory('config.ini'))
+    logger: object = logging.getLogger()
+    return logger
+
+def handle_cli_args():
+    """
+    Description: A file rarely needs change, but this
+    allows developers the authority to do so in that case.
+
+    :return:
+    """
+
+    @staticmethod
+    def reset_install():
+        """
+        Description: I seldom use nested functions, but this is to minimize
+        complexity when reading the file. I can look at handle_cli_args
+        as one function; it need not be so complex.
+
+        :return:
+        """
+        package_file = locate_directory(file='package.json')
+        logger.debug(f' 📥 Writing a reset to {package_file}')
+
+    if len(args):
+        if len(args) >= 2:
+            logger.warning(f" 🚧 Installer takes in <0 | 1> cli args")
+        match args[0]:
+            case '--reset-install':
+                reset_install()
+
+            
 def load_dependencies(root) -> dict:
     """
     Description: Load file object from parent directory.
@@ -18,6 +75,16 @@ def load_dependencies(root) -> dict:
     """
     dependency_file: dict = json.load(open(os.path.join(root, 'package.json'), 'r'))
     return dependency_file
+
+def count_dependencies(file: dict) -> int:
+    """
+    Description: Counts the dependencies in file
+    file: a json object loaded from a file
+    
+    return: <int>
+    """
+    dependency_amount = len(file.keys())
+    return dependency_amount
 
 def locate_directory(file = 'config.ini') -> str:
     """
@@ -80,14 +147,11 @@ def main():
     :return:
     """
 
-    logging.config.fileConfig(locate_directory('config.ini'))
-    logger: object = logging.getLogger()
-    logger.info(" 🔖 Finished preparing package metadata")
     logger.info(" 🧰 Attempting to install packages")
     dependencies: dict = load_dependencies('' if os.path.split(os.path.dirname(os.getcwd()))[1].__ne__('Trakr') else '..')
 
     # NOTE Dependencies that were updated in the process of installation
-    updated_dependencies: list[str] | list[None] = []
+    updated_dependencies: set[str] = []
 
     for dependency in dependencies:
         if not dependencies[dependency]["installed"]:
@@ -95,18 +159,25 @@ def main():
             # NOTE Returns an open file object connected to pipe 
             os.popen('python -m pip install {dependency}=={version}'.format(
                 dependency=dependency,
-                version=dependencies[dependency]["version"])).read()
+                version=dependencies[dependency]["version"])).read()  # NOTE read suppresses output
+            updated_dependencies.append((dependency, dependencies[dependency]))
 
     if len(updated_dependencies):
         changed_dependencies = dependencies
+        dependency_count = count_dependencies(changed_dependencies)  # NOTE when adding test cases, test both vars equal
         for index, dependency in enumerate(updated_dependencies):
-            logger.info("🖊️ Updating dependency #{dependency_id}".format(
-                dependency_id=str(index)))
-            changed_dependencies[dependency]["update"]
+            logger.info(" [{dependency_id}/{dependency_amt}] Updating dependency {dependency_name}={dependency_version}".format(
+                dependency_id=str(index),
+                dependency_amt=dependency_count,
+                dependency_name=dependency[0],
+                dependency_version=dependency[1]['version']))
+            # changed_dependencies[dependency]["update"]
 
     logger.info(" 🎉 Success!")
 
 if __name__ == "__main__":
+    logger = setup_logger_object()
+    handle_cli_args()
     main()
 
 # * NF = nerd font
