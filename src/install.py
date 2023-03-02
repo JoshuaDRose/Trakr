@@ -47,6 +47,7 @@ def log_change(change: str, _file="install.log", emoji: str = str()) -> bool:
         _input = input(logger.debug(f" 🔎 Could not find {file}. Would you like to create a log file? [n/Y] >> "))
         match _input:
             case '':
+                pass
 
 def create_file(filename):
     """
