@@ -65,24 +65,30 @@ def handle_cli_args():
             case "--reset-install":
                 reset_install()
 
-def load_dependency_as_object(file):
+def load_dependency_as_object(file) -> object:
     """
     Description: This function serves as a dynamic way testing at
     runtime such that if a file not found error takes place it can
     be run again through being sourced rather than being continuously nested
 
-    return: object (fileio object)
+    return: <object>
     """
+    dependency_file_object: dict = json.load(open(dependency_file_name, "r"))
+    return dependency_file_object
             
 def load_dependencies(root) -> dict:
     """
     Description: Load file object from parent directory.
 
-    :return: dict
+    return: <dict>
     """
     dependency_file_name: str = locate_directory(file="package.json")
-    print(dependency_file_name)
-        dependency_file_object: dict = json.load(open(dependency_file_name, "r"))
+    try:
+        load_dependency_as_object(dependency_file_name)
+    except FileNotFoundError:
+        logger.warning(" 🔎 Could not find file - changing location")
+        if 
+        load_dependency_as_object(dependency_file_name)
     return dependency_file
 
 def count_dependencies(file: dict) -> int:
@@ -95,11 +101,20 @@ def count_dependencies(file: dict) -> int:
     dependency_amount = len(file.keys())
     return dependency_amount
 
+def get_search_path() -> tuple:
+    """
+    Description: Used as a tool in io functions
+
+    return: <tuple>
+    """
+    folder, _file = os.path.split(os.path.join(os.path.split(os.path.dirname(os.getcwd()))[1], file))
+    return folder, file
+
 def locate_directory(file = "config.ini") -> str:
     """
     Description: Locate file through determining the root folder
 
-    :return: str
+    return: <str>
     """
     folder, _file = os.path.split(os.path.join(os.path.split(os.path.dirname(os.getcwd()))[1], file))
     if folder.__ne__("Trakr"):
@@ -111,7 +126,7 @@ def log_change(change: str, _file="install.log", emoji: str = str()) -> bool:
     :change: message of the change to be recorded
     :emoji: unicode emoji character - NF allowed
 
-    :return: If the function succeeded; interpreted as <true | false>
+    return: <true | false>
     """
     file = locate_directory(_file)
     # logger.debug("🥾 Removed un-needed variable: {file_content}", file_content=_file.__repr__())
