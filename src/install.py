@@ -22,7 +22,7 @@ import json
 import logging
 import logging.config
 
-args = sys.argv[1:] # NOTE remove the first element on the right side
+args: set[str] = sys.argv[1:] # NOTE remove the first element on the right side
 logger: None | object = None # Placeholder for logger object
 
 def setup_logger_object() -> object:
