@@ -34,7 +34,7 @@ def setup_logger_object() -> object:
 
     return: <object>
     """
-    logging.config.fileConfig(locate_directory('config.ini'))
+    logging.config.fileConfig(locate_directory("config.ini"))
     logger: object = logging.getLogger()
     return logger
 
@@ -55,14 +55,14 @@ def handle_cli_args():
 
         :return:
         """
-        package_file = locate_directory(file='package.json')
-        logger.debug(f' 📥 Writing a reset to {package_file}')
+        package_file = locate_directory(file="package.json")
+        logger.debug(f" 📥 Writing a reset to {package_file}")
 
     if len(args):
         if len(args) >= 2:
             logger.warning(f" 🚧 Installer takes in <0 | 1> cli args")
         match args[0]:
-            case '--reset-install':
+            case "--reset-install":
                 reset_install()
             
 def load_dependencies(root) -> dict:
@@ -71,7 +71,7 @@ def load_dependencies(root) -> dict:
 
     :return: dict
     """
-    dependency_file: dict = json.load(open(os.path.join(root, 'package.json'), 'r'))
+    dependency_file: dict = json.load(open(os.path.join(root, "package.json"), "r"))
     return dependency_file
 
 def count_dependencies(file: dict) -> int:
@@ -84,15 +84,15 @@ def count_dependencies(file: dict) -> int:
     dependency_amount = len(file.keys())
     return dependency_amount
 
-def locate_directory(file = 'config.ini') -> str:
+def locate_directory(file = "config.ini") -> str:
     """
     Description: Locate file through determining the root folder
 
     :return: str
     """
     folder, _file = os.path.split(os.path.join(os.path.split(os.path.dirname(os.getcwd()))[1], file))
-    if folder.__ne__('Trakr'):
-        return os.path.join('src', _file)
+    if folder.__ne__("Trakr"):
+        return os.path.join("src", _file)
     return _file
 
 def log_change(change: str, _file="install.log", emoji: str = str()) -> bool:
@@ -106,17 +106,17 @@ def log_change(change: str, _file="install.log", emoji: str = str()) -> bool:
     # logger.debug("🥾 Removed un-needed variable: {file_content}", file_content=_file.__repr__())
     fp = object()
     try:
-        fp = open(file, 'a')
+        fp = open(file, "a")
     except FileNotFoundError:
         _input = input(logger.debug(f" 🔎 Could not find {file}. Would you like to create a log file? [n/Y] >> "))
         try:
             match _input.lower():
-                case '' | 'yes' | 'y':
-                    with open(file, 'w') as fp: fp.close()
+                case "" | "yes" | "y":
+                    with open(file, "w") as fp: fp.close()
                     logger.debug(f" ✅ Created {file} in {os.path.join(os.getcwd(), file)} ")
                     log_change(change, _file, emoji)
                     return
-                case 'n':
+                case "n":
                     logger.debug("   Ignoring log file creation.")
                     return
         except Exception as error:
@@ -131,7 +131,7 @@ def create_file(filename):
     """
     logger.info(f" 📑 Creating {filename} in {os.getcwd()}")
     try:
-        with open(filename, 'w', False, 'utf-8') as file:
+        with open(filename, "w", False, "utf-8") as file:
             file.close()
     except PermissionError as error:
         logger.critical(f" ❌ Could not create {filename}: insufficient persmissions")
@@ -144,7 +144,7 @@ def main():
     :return:
     """
     logger.info(" 🧰 Attempting to install packages")
-    dependencies: dict = load_dependencies('' if os.path.split(os.path.dirname(os.getcwd()))[1].__ne__('Trakr') else '..')
+    dependencies: dict = load_dependencies("" if os.path.split(os.path.dirname(os.getcwd()))[1].__ne__("Trakr") else "..")
     # NOTE Dependencies that were updated in the process of installation
     updated_dependencies = {}
 
@@ -152,9 +152,12 @@ def main():
         if not dependencies[dependency]["installed"]:
             # https://stackoverflow.com/questions/3503879/assign-output-of-os-system-to-a-variable-and-prevent-it-from-being-displayed-on
             # NOTE Returns an open file object connected to pipe 
-            os.popen('python -m pip install {dependency}=={version}'.format(
+            os.popen("python -m pip install {dependency}=={version}".format(
                 dependency=dependency,
                 version=dependencies[dependency]["version"])).read()  # NOTE read suppresses output
+            # Assign an "is_installed" | "installed" value.
+            updated_dependencies[dependency] = {}
+            updated_dependencies[dependency]["installed"] = dependencies[dependency]["installed"]
             updated_dependencies[dependency] = dependencies[dependency]
 
     if len(updated_dependencies.keys()):
@@ -165,7 +168,7 @@ def main():
                 dependency_id=str(index),
                 dependency_amt=dependency_count,
                 dependency_name=dependency,
-                dependency_version=updated_dependencies[dependency]['version']))
+                dependency_version=updated_dependencies[dependency]["version"]))
 
     logger.info(" 🎉 Success!")
 
