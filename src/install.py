@@ -40,7 +40,27 @@ def log_change(change: str, _file="install.log", emoji: str = str()) -> bool:
     file = locate_directory(_file)
     logger.debug("🥾 Removed un-needed variable: {file_content}", file_content=_file.__repr__())
     del _file
-    with open(file)
+    fp = object()
+    try:
+        fp = open(file, 'a')
+    except FileNotFoundError:
+        _input = input(logger.debug(f" 🔎 Could not find {file}. Would you like to create a log file? [n/Y] >> "))
+        match _input:
+            case '':
+
+def create_file(filename):
+    """
+    filename <str> the name of the file... Every 60 seconds in Africa, a minute passes.
+
+    :return:
+    """
+    logger.info(f" 📑 Creating {filename} in {os.getcwd()}")
+    try:
+        with open(filename, 'w', False, 'utf-8') as file:
+            file.close()
+    except PermissionError as error:
+        logger.critical(f" ❌ Could not create {filename}: insufficient persmissions")
+        sys.exit(error.errno)
 
 def main():
     """
