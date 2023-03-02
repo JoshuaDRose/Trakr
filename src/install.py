@@ -15,7 +15,6 @@ def load_dependencies(root) -> dict:
     :return: dict
     """
     dependency_file: dict = json.load(open(os.path.join(root, 'package.json'), 'r'))
-    print("load_dependencies: returned:", dependency_file)
     return dependency_file
 
 def locate_logger_config() -> str:
@@ -26,9 +25,7 @@ def locate_logger_config() -> str:
     """
     folder, file = os.path.split(os.path.join(os.path.split(os.path.dirname(os.getcwd()))[1], 'config.ini'))
     if folder.__ne__('Trakr'):
-        print('locate_logger_config: returned', os.path.join('src', file))
         return os.path.join('src', file)
-    print('locate_logger_config: returned', file)
     return file
 
 def main():
@@ -37,11 +34,11 @@ def main():
 
     :return:
     """
-    # TODO emojis
+
     logging.config.fileConfig(locate_logger_config())
     logger: object = logging.getLogger()
-    logger.info("Finished preparing package metadata")
-    logger.info("Attempting to install packages")
+    logger.info(" 🔖 Finished preparing package metadata")
+    logger.info(" 🧰 Attempting to install packages")
     dependencies: dict = load_dependencies('' if os.path.split(os.path.dirname(os.getcwd()))[1].__ne__('Trakr') else '..')
 
     for dependency in dependencies:
