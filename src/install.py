@@ -46,7 +46,7 @@ def log_change(change: str, _file="install.log", emoji: str = str()) -> bool:
         _input = input(logger.debug(f" 🔎 Could not find {file}. Would you like to create a log file? [n/Y] >> "))
         try:
             match _input.lower():
-                case '' or 'yes' or 'y':
+                case '' | 'yes' | 'y':
                     with open(file, 'w') as fp: fp.close()
                     logger.debug(f" ✅ Created {file} in {os.path.join(os.getcwd(), file)} ")
                     log_change(change, _file, emoji)
