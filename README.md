@@ -27,7 +27,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 <!-- License + Copyright -->
 <p  align="center">
   <i>© <a href="https://github.com/JoshuaDRose">Joshua Rose</a> 2023 - 2023</i><br>
-  <i>Licensed under <a href="https://github.com/Lissy93/twitter-sentiment-visualisation/blob/dev/README.md">MIT</a></i><br>
+  <i>Licensed under <a href="https://raw.githubusercontent.com/segmentio/snippet/master/LICENSE">MIT</a></i><br>
   <a href="https://github.com/JoshuaDRose"><img src="https://i.ibb.co/4KtpYxb/octocat-clean-mini.png" /></a><br>
   <sup>Thanks for visiting :)</sup>
 </p>
