@@ -3,6 +3,7 @@ TODO: 🪴 emoticons
 TODO:    log folder
 """
 import sys
+# NOTE see docs.python.org/3.10/library/os.html
 import os
 import json
 
@@ -29,15 +30,17 @@ def locate_directory(file = 'config.ini') -> str:
         return os.path.join('src', _file)
     return _file
 
-def log_change(change: str, emoji: str = str()) -> bool:
+def log_change(change: str, _file="install.log", emoji: str = str()) -> bool:
     """
     :change: message of the change to be recorded
     :emoji: unicode emoji character - NF* allowed
 
     :return: If the function succeeded; interpreted as <true | false>
     """
-    if 
-    with open(os.path.join(
+    file = locate_directory(_file)
+    logger.debug("🥾 Removed un-needed variable: {file_content}", file_content=_file.__repr__())
+    del _file
+    with open(file)
 
 def main():
     """
@@ -46,7 +49,7 @@ def main():
     :return:
     """
 
-    logging.config.fileConfig(locate_logger_config())
+    logging.config.fileConfig(locate_directory('config.ini')
     logger: object = logging.getLogger()
     logger.info(" 🔖 Finished preparing package metadata")
     logger.info(" 🧰 Attempting to install packages")
@@ -57,7 +60,8 @@ def main():
 
     for dependency in dependencies:
         if not dependencies[dependency]["installed"]:
-            os.system('python -m pip install {dependency}=={version}'.format(
+            # NOTE Returns an open file object connected to pipe 
+            os.popen('python -m pip install {dependency}=={version}'.format(
                 dependency=dependency,
                 version=dependencies[dependency]["version"]))
 
@@ -66,6 +70,7 @@ def main():
         for index, dependency in enumerate(updated_dependencies):
             logger.info("🖊️ Updating dependency #{dependency_id}".format(
                 dependency_id=str(index)))
+            changed_dependencies[dependency]["update"]
 
     logger.info(" 🎉 Success!")
 
