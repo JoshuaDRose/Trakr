@@ -164,8 +164,8 @@ def main():
             logger.info(" [{dependency_id}/{dependency_amt}] Updating dependency {dependency_name}={dependency_version}".format(
                 dependency_id=str(index),
                 dependency_amt=dependency_count,
-                dependency_name=dependency[0],
-                dependency_version=dependency[1]['version']))
+                dependency_name=dependency,
+                dependency_version=updated_dependencies[dependency]['version']))
 
     logger.info(" 🎉 Success!")
 
