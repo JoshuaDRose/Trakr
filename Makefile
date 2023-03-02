@@ -1,3 +1,5 @@
+#!bin/bash
+
 setup:
 	python src/install.py
 
